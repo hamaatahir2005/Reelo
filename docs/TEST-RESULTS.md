@@ -23,3 +23,7 @@ Environment: Linux, Node 24.19.0, npm 11.9.0. Dependencies installed successfull
 Expo Router initially failed to resolve its app-root transform in the workspace. Adding the matching router package at the monorepo root fixed both platform exports. UI tests mock native safe areas and preferences; they do not replace device testing. PostgreSQL tests use PGlite with minimal Auth/Storage schema stubs and omit the Supabase realtime publication. Real email verification, password recovery redirects, media transfer, push delivery and provider webhooks remain unverified.
 
 Exported JavaScript/Hermes bundles are **not installable APK or IPA files**. The EAS build requires an authenticated Expo session or securely configured EXPO_TOKEN, a linked EAS project, backend public configuration, and Android signing setup. iOS also requires Apple Developer signing/provisioning and owner authorization.
+
+## Web preview verification
+
+Expo web export passed. Chromium at a 390×844 viewport opened the actual Expo bundle, selected Sorani, Arabic and English, switched to registration, and verified that authentication is disabled when no backend is configured. No browser page errors occurred. Fixed a blank-page failure caused by untransformed `import.meta` in Zustand middleware by enabling the supported Expo Babel transform in `babel.config.js`. Root navigation now mounts before authentication redirects. No hosted backend operations were claimed as tested.

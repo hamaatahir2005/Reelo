@@ -133,5 +133,6 @@
   "messaging": "Messaging",
   "live": "Live (not configured)",
   "purchases": "Purchases (disabled)",
-  "payouts": "Payouts (disabled)"
+  "payouts": "Payouts (disabled)",
+  "previewUnavailable": "Web preview: language selection and sign-in screens are available. Account and video features require a configured Supabase backend."
 }

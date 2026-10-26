@@ -29,6 +29,7 @@ const config: ExpoConfig = {
       "android.permission.ACCESS_FINE_LOCATION",
     ],
   },
+  web: { bundler: "metro", output: "single", name: "Reelo Preview" },
   plugins: [
     "expo-router",
     "expo-secure-store",

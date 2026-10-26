@@ -8,9 +8,9 @@ import {
 } from "@expo-google-fonts/noto-sans-arabic";
 import { View } from "react-native";
 import { useTranslation } from "react-i18next";
-import { supabase, configured } from "../src/lib/supabase";
+import { supabase } from "../src/lib/supabase";
 import { usePreferences } from "../src/lib/store";
-import { Screen, Label } from "../src/ui";
+import { Label } from "../src/ui";
 const client = new QueryClient({
   defaultOptions: { queries: { retry: 2, staleTime: 30000, gcTime: 120000 } },
 });
@@ -44,18 +44,6 @@ export default function Root() {
     });
     return () => subscription.unsubscribe();
   }, []);
-  if (!configured)
-    return (
-      <Screen>
-        <Label>{t("setupRequired")}</Label>
-      </Screen>
-    );
-  if ((!fonts && !error) || !ready)
-    return (
-      <Screen>
-        <Label>{t("loading")}</Label>
-      </Screen>
-    );
   return (
     <QueryClientProvider client={client}>
       <View style={{ flex: 1, direction: i18n.dir() }}>
@@ -66,6 +54,7 @@ export default function Root() {
               i18n.dir() === "rtl" ? "slide_from_left" : "slide_from_right",
           }}
         />
+        {((!fonts && !error) || !ready) && <View style={{position:"absolute",inset:0,backgroundColor:"#11111B",justifyContent:"center",padding:24}}><Label>{t("loading")}</Label></View>}
       </View>
     </QueryClientProvider>
   );

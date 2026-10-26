@@ -94,3 +94,7 @@ Database tests execute actual PostgreSQL using PGlite with mocked Supabase Auth/
 - `docs`: setup, limitations, operations and legal templates.
 
 Complete file listing: [TREE.txt](docs/TREE.txt).
+
+## Web preview
+
+From `apps/mobile`, run `npx expo start --web`, or export with `npx expo export --platform web --output-dir dist-web`. Without Supabase, onboarding, language selection and authentication forms can be inspected; submitting account actions is disabled with an explicit notice. This does not provide a populated video feed or a native APK/IPA.

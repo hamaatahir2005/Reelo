@@ -3,7 +3,7 @@ import { Alert } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import * as Linking from "expo-linking";
 import { useTranslation } from "react-i18next";
-import { supabase } from "../src/lib/supabase";
+import { supabase, configured } from "../src/lib/supabase";
 import { credentials } from "@reelo/validation";
 import { Screen, Label, Field, Button, styles } from "../src/ui";
 import { usePreferences } from "../src/lib/store";
@@ -19,6 +19,7 @@ export default function Auth() {
     if (initial) setMode(initial);
   }, [initial]);
   async function submit() {
+    if (!configured) return;
     setBusy(true);
     try {
       let error;
@@ -56,6 +57,7 @@ export default function Auth() {
         <Label style={styles.title}>Reelo</Label>
         <Label>{t("tagline")}</Label>
         <Label>{t("onboarding")}</Label>
+        {!configured && <Label accessibilityRole="alert">{t("previewUnavailable")}</Label>}
         {(["ckb", "ar", "en"] as const).map((locale) => (
           <Button
             key={locale}
@@ -69,6 +71,8 @@ export default function Auth() {
     <Screen>
       <Label style={styles.title}>Reelo</Label>
       <Label>{t(mode)}</Label>
+      {!configured && <Label accessibilityRole="alert">{t("previewUnavailable")}</Label>}
+      {(["ckb", "ar", "en"] as const).map(locale=><Button key={locale} title={{ckb:"کوردی",ar:"العربية",en:"English"}[locale]} onPress={()=>prefs.set({locale})}/>)}
       {mode !== "newPassword" && (
         <Field
           accessibilityLabel={t("email")}
@@ -89,7 +93,7 @@ export default function Auth() {
         />
       )}
       <Label>{t("passwordHint")}</Label>
-      <Button title={t(mode)} disabled={busy} onPress={() => void submit()} />
+      <Button title={t(mode)} disabled={busy || !configured} onPress={() => void submit()} />
       {["login", "register", "reset"]
         .filter((m) => m !== mode)
         .map((m) => (
