@@ -1,0 +1,14 @@
+node_modules/
+.expo/
+.next/
+dist/
+.env*
+!.env.example
+*.jks
+*.p8
+*.p12
+*.mobileprovision
+*.apk
+*.aab
+*.ipa
+*.tsbuildinfo
