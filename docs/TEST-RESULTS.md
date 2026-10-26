@@ -27,3 +27,7 @@ Exported JavaScript/Hermes bundles are **not installable APK or IPA files**. The
 ## Web preview verification
 
 Expo web export passed. Chromium at a 390×844 viewport opened the actual Expo bundle, selected Sorani, Arabic and English, switched to registration, and verified that authentication is disabled when no backend is configured. No browser page errors occurred. Fixed a blank-page failure caused by untransformed `import.meta` in Zustand middleware by enabling the supported Expo Babel transform in `babel.config.js`. Root navigation now mounts before authentication redirects. No hosted backend operations were claimed as tested.
+
+## Supabase connection check
+
+The supplied public project URL/key returned HTTP 200 from `/auth/v1/settings` with email authentication enabled. REST requests through the actual Supabase client returned HTTP 404 / PGRST205 for `profiles`; `feature_flags` was also absent. No account or content was created. The preview therefore displays a localized schema-setup notice and keeps account submissions disabled until its live readiness check confirms the required database objects exist. Public credentials are provided through ignored environment files and embedded in the client bundle as intended; no service-role key was supplied. `supabase/bootstrap.sql` is generated from the versioned migrations and executed by the PostgreSQL test suite with Supabase-specific stubs.

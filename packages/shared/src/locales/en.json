@@ -134,5 +134,8 @@
   "live": "Live (not configured)",
   "purchases": "Purchases (disabled)",
   "payouts": "Payouts (disabled)",
-  "previewUnavailable": "Web preview: language selection and sign-in screens are available. Account and video features require a configured Supabase backend."
+  "previewUnavailable": "Web preview: language selection and sign-in screens are available. Account and video features require a configured Supabase backend.",
+  "checkingBackend": "Checking database setup…",
+  "databaseSetupRequired": "Supabase is connected. Reelo database setup is still required before you can sign in or create an account.",
+  "backendSetupGuide": "Open database setup guide"
 }

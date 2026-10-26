@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 import { supabase, configured } from "../src/lib/supabase";
 import { credentials } from "@reelo/validation";
 import { Screen, Label, Field, Button, styles } from "../src/ui";
+import { useQuery } from "@tanstack/react-query";
+import { databaseReady } from "../src/lib/backend";
 import { usePreferences } from "../src/lib/store";
 export default function Auth() {
   const { mode: initial } = useLocalSearchParams<{ mode: string }>();
@@ -18,8 +20,20 @@ export default function Auth() {
   useEffect(() => {
     if (initial) setMode(initial);
   }, [initial]);
+  const readiness = useQuery({
+    queryKey: ["backend-readiness"], queryFn: databaseReady,
+    enabled: configured, retry: 1, staleTime: 10000,
+  });
+  const canSubmit = configured && readiness.data === true;
+  const connectionNotice = configured && !canSubmit ? (
+    <>
+      <Label accessibilityRole="alert">{t(readiness.isFetching ? "checkingBackend" : readiness.error ? "requestFailed" : "databaseSetupRequired")}</Label>
+      <Button title={t("retry")} disabled={readiness.isFetching} onPress={() => void readiness.refetch()}/>
+      <Button title={t("backendSetupGuide")} onPress={() => void Linking.openURL("https://github.com/hamaatahir2005/Reelo/blob/main/docs/SUPABASE-CONNECT-ckb.md")}/>
+    </>
+  ) : null;
   async function submit() {
-    if (!configured) return;
+    if (!canSubmit) return;
     setBusy(true);
     try {
       let error;
@@ -58,6 +72,7 @@ export default function Auth() {
         <Label>{t("tagline")}</Label>
         <Label>{t("onboarding")}</Label>
         {!configured && <Label accessibilityRole="alert">{t("previewUnavailable")}</Label>}
+      {connectionNotice}
         {(["ckb", "ar", "en"] as const).map((locale) => (
           <Button
             key={locale}
@@ -72,6 +87,7 @@ export default function Auth() {
       <Label style={styles.title}>Reelo</Label>
       <Label>{t(mode)}</Label>
       {!configured && <Label accessibilityRole="alert">{t("previewUnavailable")}</Label>}
+      {connectionNotice}
       {(["ckb", "ar", "en"] as const).map(locale=><Button key={locale} title={{ckb:"کوردی",ar:"العربية",en:"English"}[locale]} onPress={()=>prefs.set({locale})}/>)}
       {mode !== "newPassword" && (
         <Field
@@ -93,7 +109,7 @@ export default function Auth() {
         />
       )}
       <Label>{t("passwordHint")}</Label>
-      <Button title={t(mode)} disabled={busy || !configured} onPress={() => void submit()} />
+      <Button title={t(mode)} disabled={busy || !canSubmit} onPress={() => void submit()} />
       {["login", "register", "reset"]
         .filter((m) => m !== mode)
         .map((m) => (
