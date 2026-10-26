@@ -1,0 +1,35 @@
+name: Android APK (EAS)
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: preview
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      EAS_PROJECT_ID: ${{ vars.EAS_PROJECT_ID }}
+      EXPO_PUBLIC_SUPABASE_URL: ${{ vars.EXPO_PUBLIC_SUPABASE_URL }}
+      EXPO_PUBLIC_SUPABASE_ANON_KEY: ${{ vars.EXPO_PUBLIC_SUPABASE_ANON_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Require real configuration
+        run: |
+          test -n "$EXPO_TOKEN" || { echo 'Set EXPO_TOKEN in the preview environment secrets'; exit 1; }
+          test -n "$EAS_PROJECT_ID" || { echo 'Set EAS_PROJECT_ID in preview environment variables'; exit 1; }
+          test -n "$EXPO_PUBLIC_SUPABASE_URL" || { echo 'Set Supabase URL'; exit 1; }
+          test -n "$EXPO_PUBLIC_SUPABASE_ANON_KEY" || { echo 'Set Supabase public key'; exit 1; }
+      - run: npm ci
+      - run: npm run typecheck && npm test
+      - uses: expo/expo-github-action@v8
+        with:
+          eas-version: latest
+          token: ${{ secrets.EXPO_TOKEN }}
+      - name: Build installable APK
+        working-directory: apps/mobile
+        run: eas build --platform android --profile preview --non-interactive

@@ -1,0 +1,25 @@
+# Verification performed on 2026-10-26
+
+Environment: Linux, Node 24.19.0, npm 11.9.0. Dependencies installed successfully after resolving React type conflicts. `package-lock.json` records installed versions. SDK 54 compatibility matches Expo's bundled native-module map; `expo install --check` passed in offline mode, which does not validate against remote Expo metadata.
+
+| Check | Actual result |
+| --- | --- |
+| npm dependency installation | Passed |
+| TypeScript, all four workspaces | Passed |
+| ESLint | Passed |
+| Vitest | 14 tests passed (9 PostgreSQL/RLS, 5 validation/localization/media/ranking) |
+| React Native Testing Library / Jest | 2 tests passed (accessible/disabled actions, field edits and RTL text) |
+| Node static test file | Passed |
+| Next.js production build | Passed; generated `apps/admin/.next` |
+| Running admin HTTP smoke | HTTP 200 from `127.0.0.1:3000`; REELO HTML rendered |
+| Expo Android bundle export | Passed; generated Hermes bundle in `apps/mobile/dist/_expo/static/js/android` |
+| Expo iOS bundle export | Passed; generated Hermes bundle in `apps/mobile/dist/_expo/static/js/ios` |
+| EAS account check | `Not logged in` |
+| APK cloud build attempt | Blocked: `An Expo user account is required to proceed.` |
+| APK / AAB / signed IPA | Not generated |
+| Hosted Supabase/Auth/Storage/Edge Functions | Not tested; no project credentials configured |
+| Android/iOS device or emulator tests | Not performed; no devices/Android SDK/iOS signing environment available |
+
+Expo Router initially failed to resolve its app-root transform in the workspace. Adding the matching router package at the monorepo root fixed both platform exports. UI tests mock native safe areas and preferences; they do not replace device testing. PostgreSQL tests use PGlite with minimal Auth/Storage schema stubs and omit the Supabase realtime publication. Real email verification, password recovery redirects, media transfer, push delivery and provider webhooks remain unverified.
+
+Exported JavaScript/Hermes bundles are **not installable APK or IPA files**. The EAS build requires an authenticated Expo session or securely configured EXPO_TOKEN, a linked EAS project, backend public configuration, and Android signing setup. iOS also requires Apple Developer signing/provisioning and owner authorization.

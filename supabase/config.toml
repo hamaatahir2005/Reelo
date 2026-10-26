@@ -1,0 +1,16 @@
+project_id = "reelo"
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+[db]
+port = 54322
+major_version = 15
+[auth]
+site_url = "http://localhost:8081"
+additional_redirect_urls = ["reelo-dev://auth/callback", "http://localhost:3000"]
+[auth.email]
+enable_signup = true
+enable_confirmations = true
+[storage]
+file_size_limit = "100MiB"

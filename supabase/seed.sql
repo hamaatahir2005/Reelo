@@ -1,0 +1,1 @@
+-- No synthetic public content. Create test accounts with local Auth; see tests/rls.integration.test.ts.

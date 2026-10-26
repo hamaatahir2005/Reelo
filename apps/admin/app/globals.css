@@ -1,0 +1,95 @@
+@import "tailwindcss";
+:root {
+  color-scheme: dark;
+  background: #11111b;
+  color: #f8fafc;
+  font-family: Arial, "Noto Sans Arabic", sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+button {
+  cursor: pointer;
+  min-height: 48px;
+}
+button:disabled {
+  opacity: 0.4;
+  cursor: wait;
+}
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid #f43f8b;
+  outline-offset: 3px;
+}
+input,
+textarea,
+select {
+  background: #212132;
+  border: 1px solid #52526a;
+  border-radius: 12px;
+  padding: 12px;
+  color: inherit;
+  min-height: 48px;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+td,
+th {
+  text-align: start;
+  padding: 14px;
+  border-bottom: 1px solid #343449;
+}
+td {
+  max-width: 320px;
+  overflow-wrap: anywhere;
+}
+th {
+  color: #bac0d0;
+}
+a {
+  color: #c4b5fd;
+}
+.card {
+  border: 1px solid #343449;
+  background: #1a1a29;
+  border-radius: 24px;
+  padding: 24px;
+}
+.btn {
+  background: #8b5cf6;
+  border: 0;
+  color: white;
+  padding: 12px 18px;
+  border-radius: 12px;
+}
+.quiet {
+  background: #29293b;
+}
+.error {
+  color: #fda4af;
+}
+h1,
+h2,
+p {
+  margin: 0;
+}
+h1 {
+  font-size: 32px;
+  font-weight: 800;
+}
+h2 {
+  font-size: 22px;
+  font-weight: 700;
+}
